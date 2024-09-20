@@ -73,6 +73,12 @@ passport.deserializeUser(async (id, done) => {
 })
 
 function indexRouteGet(req, res) {
+    if (req.session.viewCount) {
+        req.session.viewCount++;
+    } else {
+        req.session.viewCount = 1;
+    }
+    console.log(req.session.viewCount);
     res.render("index", { title: "User Login Page", user: req.user });
 }
 
