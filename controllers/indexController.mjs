@@ -5,7 +5,7 @@ function indexRouteGet(req, res) {
 }
 
 function signUpFormGet(req, res) {
-    res.render("/sign-up-form")
+    res.render("sign-up-form")
 }
 
 async function signUpPost(req, res) {
