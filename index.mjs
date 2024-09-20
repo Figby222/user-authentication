@@ -7,6 +7,7 @@ import session from "express-session";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import pool from "./db/pool.mjs";
+import bcrypt from "bcryptjs";
 
 const __dirname = import.meta.dirname;
 
@@ -65,15 +66,21 @@ function signUpFormGet(req, res) {
 
 async function signUpPost(req, res) {
     try {
-        await pool.query("INSERT INTO users (username, password) VALUES ($1, $2)", [
-            req.body.username,
-            req.body.password
-        ])
+        bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
+            if (err) {
+                return next(err);
+            }
+            await pool.query("INSERT INTO users (username, password) VALUES ($1, $2)", [
+                req.body.username,
+                hashedPassword
+            ])
 
-        res.redirect("/");
+            res.redirect("/");
+        })
     } catch (err) {
         return next(err);
     }
+
 }
 
 function logOutGet(req, res, next) {
