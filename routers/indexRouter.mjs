@@ -7,4 +7,6 @@ indexRouter.get("/sign-up", indexController.signUpFormGet);
 
 indexRouter.get("/", indexController.indexRouteGet);
 
+indexRouter.post("/sign-up", indexController.signUpPost);
+
 export default indexRouter;
