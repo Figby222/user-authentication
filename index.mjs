@@ -8,13 +8,28 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import pool from "./db/pool.mjs";
 import bcrypt from "bcryptjs";
+import connectPgSimple from "connect-pg-simple";
+const pgSession = connectPgSimple(session);
 
 const __dirname = import.meta.dirname;
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-app.use(session({ secret: "cats", resave: false, saveUniitialized: false }));
+const ONE_DAY = 1000 * 60 * 60 * 24;
+
+app.use(session({ 
+    store: new pgSession({
+        pool: pool,
+        tableName: "user_sessions"
+    }),
+    secret: "cats", 
+    resave: false, 
+    saveUniitialized: false ,
+    cookie: {
+        maxAge: ONE_DAY
+    }
+}));
 app.use(passport.session());
 app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
