@@ -52,7 +52,7 @@ passport.deserializeUser(async (id, done) => {
 })
 
 function indexRouteGet(req, res) {
-    res.render("index", { title: "User Login Page" });
+    res.render("index", { title: "User Login Page", user: req.user });
 }
 
 function signUpFormGet(req, res) {
