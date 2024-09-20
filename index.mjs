@@ -72,6 +72,18 @@ async function signUpPost(req, res) {
     }
 }
 
+function logOutGet(req, res, next) {
+    req.logout((err) => {
+        if (err) {
+            return next(err);
+        }
+
+        res.redirect("/");
+    });
+}
+
+app.get("/log-out", logOutGet);
+
 app.get("/sign-up", signUpFormGet);
 
 app.get("/", indexRouteGet);
