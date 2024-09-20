@@ -51,6 +51,33 @@ passport.deserializeUser(async (id, done) => {
     }
 })
 
+function indexRouteGet(req, res) {
+    res.render("index", { title: "User Login Page" });
+}
+
+function signUpFormGet(req, res) {
+    res.render("sign-up-form")
+}
+
+async function signUpPost(req, res) {
+    try {
+        await pool.query("INSERT INTO users (username, password) VALUES ($1, $2)", [
+            req.body.username,
+            req.body.password
+        ])
+
+        res.redirect("/");
+    } catch (err) {
+        return next(err);
+    }
+}
+
+app.get("/sign-up", signUpFormGet);
+
+app.get("/", indexRouteGet);
+
+app.post("/sign-up", signUpPost);
+
 app.use("/", indexRouter);
 
 app.listen(process.env.PORT, () => {
