@@ -78,6 +78,8 @@ app.get("/", indexRouteGet);
 
 app.post("/sign-up", signUpPost);
 
+app.post("/log-in", passport.authenticate("local", { successRedirect: "/", failureRedirect: "/" }));
+
 app.use("/", indexRouter);
 
 app.listen(process.env.PORT, () => {
